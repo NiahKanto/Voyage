@@ -75,3 +75,13 @@ foreign key (idHotel) references Hotel(id),
 foreign key (idCooperative) references Cooperative(id),
 foreign key (idActivitesVoyage) references ActivitesVoyage(id)
 );
+alter table Pack add nbreJours int;
+create view Pack_et_hotel as (select Pack.id idpack,Hotel.nom nom_hotel,Pack.idCooperative cooperat,Pack.nbreVoyageurs,Pack.prix,Pack.idRegionDest idlieu,Pack.nbreJours from Pack join Hotel on Pack.idHotel = Hotel.id );
+create view Lieu_et_pack as (select Pack_et_hotel.idpack,Pack_et_hotel.nom_hotel,Pack_et_hotel.cooperat,Pack_et_hotel.nbreVoyageurs,Pack_et_hotel.prix,region.nom lieu,Pack_et_hotel.nbreJours from Region join Pack_et_hotel on Region.id = Pack_et_hotel.idlieu);
+create view DetailsparPack as (select idpack,lieu,nom_hotel Hotel,Cooperative.nom cooperative,nbreVoyageurs,nbrejours,prix from Lieu_et_pack join Cooperative on Lieu_et_pack.cooperat=Cooperative.id);
+test_donner(
+    insert into region (nom) values ('Antsirabe'); 
+    insert into Cooperative (nom,prixParKm) values ('Cotisse',75)
+    insert into hotel (idregion,nom,repas,prixJournalierParPersonne) values (1,'Milay',2,1500)
+    insert into pack (idRegionDest,idHotel,idCooperative,nbreVoyageurs,nbrejours,prix) values (1,1,1,5,4,150000);
+)
