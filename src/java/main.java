@@ -20,6 +20,6 @@ public class main {
         DBTable[] liste=r.find("select * from Region where id=8", c.getConnection());
         for(int i=0;i<liste.length;i++){
             System.out.println(((Region)(liste[i])).getNom());
-         }
+        }
     }
 }
