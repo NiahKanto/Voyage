@@ -9,17 +9,19 @@ import dbtable.Connexion;
 import dbtable.DBTable;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Voyage;
 
 /**
  *
- * @author rog
+ * @author Avotra
  */
-public class DetailsPack extends HttpServlet {
+public class PayementServelet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,23 +35,17 @@ public class DetailsPack extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            Connexion connex = new Connexion();
-            Connection con = connex.getConnection();
-            //out.print("ok");
-            DBTable fonction = new DBTable();
-            String idpack = request.getParameter("id");
-            String requete = "select * from DetailsparPack where idpack="+Integer.parseInt(idpack);
-            DBTable[] resultat = fonction.find(requete, con);
-//            request.setAttribute("resultat", resultat);
-//            RequestDispatcher dispat = request.getRequestDispatcher("Detailspack.jsp");
-//            dispat.forward(request,response);
-            for(int i = 0 ; i < resultat.length ; i++){
-                out.print(resultat[i]);
-            }
-        } catch (Exception ex) {
-            out.print(ex.getMessage());
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet PayementServelet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet PayementServelet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -65,7 +61,30 @@ public class DetailsPack extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        Voyage v = new Voyage();
+        int idRegionDest = Integer.parseInt(request.getParameter("idRegionDest"));
+        int idRegionDepart = Integer.parseInt(request.getParameter("idRegionDepart"));
+        int idHotel = Integer.parseInt(request.getParameter("idHotel"));
+        int idCooperative = Integer.parseInt(request.getParameter("idCooperative"));
+        int idActvitesVoyage = Integer.parseInt(request.getParameter("idActvitesVoyage"));
+        int nbreVoyageurs = Integer.parseInt(request.getParameter("nbreVoyageurs"));
+        int nbreJours = Integer.parseInt(request.getParameter("nbreJours"));
+        
+        v.setIdActvitesVoyage(idActvitesVoyage);
+        v.setIdCooperative(idCooperative);
+        v.setIdHotel(idHotel);
+        v.setIdRegionDepart(idRegionDepart);
+        v.setIdRegionDest(idRegionDest);
+        v.setNbreJours(nbreJours);
+        v.setNbreVoyageurs(nbreVoyageurs);
+        Connexion c = new Connexion();
+        try {
+            v.insert(c.getConnection());
+        } catch (Exception ex) {
+            Logger.getLogger(PayementServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**
