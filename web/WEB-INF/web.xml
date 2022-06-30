@@ -8,6 +8,14 @@
         <servlet-name>PayementServelet</servlet-name>
         <url-pattern>/PayementServelet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>DetailsPack</servlet-name>
+        <servlet-class>controllers.DetailsPack</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DetailsPack</servlet-name>
+        <url-pattern>/DetailsPack</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

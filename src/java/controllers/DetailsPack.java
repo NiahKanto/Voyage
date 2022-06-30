@@ -5,16 +5,18 @@
  */
 package controllers;
 
-import dbtable.Connexion;
 import dbtable.DBTable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import model.DetailsparPack;
+import dbtable.Connexion;
+import java.util.Vector;
 /**
  *
  * @author rog
@@ -37,17 +39,13 @@ public class DetailsPack extends HttpServlet {
         try {
             Connexion connex = new Connexion();
             Connection con = connex.getConnection();
-            //out.print("ok");
             DBTable fonction = new DBTable();
             String idpack = request.getParameter("id");
             String requete = "select * from DetailsparPack where idpack="+Integer.parseInt(idpack);
-            DBTable[] resultat = fonction.find(requete, con);
-//            request.setAttribute("resultat", resultat);
-//            RequestDispatcher dispat = request.getRequestDispatcher("Detailspack.jsp");
-//            dispat.forward(request,response);
-            for(int i = 0 ; i < resultat.length ; i++){
-                out.print(resultat[i]);
-            }
+            Vector<DetailsparPack>  vect = fonction.findDetails(requete, con);
+            request.setAttribute("resultat", vect);
+            RequestDispatcher dispat = request.getRequestDispatcher("Detailspack.jsp");
+            dispat.forward(request,response);
         } catch (Exception ex) {
             out.print(ex.getMessage());
         }

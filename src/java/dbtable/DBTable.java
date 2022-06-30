@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
+import model.DetailsparPack;
 
 /**
  *
@@ -217,5 +218,23 @@ public class DBTable {
 			allDb[i]=((DBTable)DBTable.elementAt(i));
 		}
 		return allDb;
+	}
+	public Vector<DetailsparPack> findDetails(String requete,Connection con) throws Exception
+	{
+		java.sql.Statement stmt = con.createStatement();
+		ResultSet res = stmt.executeQuery(requete);
+		Vector<DetailsparPack> DBTable=new Vector<DetailsparPack>();
+                DetailsparPack allDb = new DetailsparPack();
+		while(res.next())
+		{
+                    allDb.setlieu(res.getString(2));
+                    allDb.setHotel(res.getString(3));
+                    allDb.setcooperative(res.getString(4));
+                    allDb.setnbreVoyageurs(res.getInt(5));
+                    allDb.setnbrejours(res.getInt(6));
+                    allDb.setprix(res.getDouble(7));
+		}
+		DBTable.add(allDb);
+		return DBTable;
 	}
 }
